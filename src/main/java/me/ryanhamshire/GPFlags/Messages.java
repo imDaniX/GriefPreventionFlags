@@ -3,6 +3,7 @@ package me.ryanhamshire.GPFlags;
 /**
  * Plugin messages
  */
+@Deprecated
 public enum Messages {
 
     NoFlagsInThisClaim,

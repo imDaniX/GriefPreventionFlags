@@ -11,6 +11,7 @@ import java.util.HashMap;
  * Data holder for flags
  */
 //singleton class which manages all GriefPrevention data (except for config options)
+@Deprecated
 public class FlagsDataStore {
 
 	private final static String dataLayerFolderPath = "plugins" + File.separator + "GPFlags";
@@ -33,20 +34,11 @@ public class FlagsDataStore {
 		HashMap<String, CustomizableMessage> defaults = new HashMap<>();
 
 		//initialize defaults
-		this.addDefault(defaults, Messages.ReloadComplete, "Reloaded config settings and flags from disk.  If you've updated your GPFlags jar file, you MUST either /reload or reboot your server to activate the update.", null);
-		this.addDefault(defaults, Messages.NoFlagsInThisClaim, "This claim doesn't have any flags.", null);
-		this.addDefault(defaults, Messages.ThatFlagNotSet, "That flag isn't set here.", null);
-		this.addDefault(defaults, Messages.InvalidFlagDefName, "Available Flags: {0}", "0:flags list");
 		this.addDefault(defaults, Messages.NoFlagsHere, "There aren't any flags set here.", null);
-		this.addDefault(defaults, Messages.StandInAClaim, "Please stand inside a GriefPrevention claim and try again.", null);
-		this.addDefault(defaults, Messages.FlagsClaim, "This Claim: {0}", "0:list of active flags in a land claim");
-		this.addDefault(defaults, Messages.FlagsParent, "Parent Claim: {0}", "0:list of active flags in the parent claim of this land claim");
-		this.addDefault(defaults, Messages.FlagsDefault, "All Claims: {0}", "0:list of active default flags in all land claims");
 		this.addDefault(defaults, Messages.FlagsWorld, "This World: {0}", "0:list of active flags in this world");
 		this.addDefault(defaults, Messages.FlagsServer, "Entire Server: {0}", "0:list of flags which are active everywhere on the server");
 		this.addDefault(defaults, Messages.NoFlagPermission, "You don't have permission to use that flag.", null);
-		this.addDefault(defaults, Messages.DefaultFlagSet, "Set flag for all land claims.  To make exceptions, move to specific land claims and use /UnSetClaimFlag.  Undo with /UnSetDefaultClaimFlag.", null);
-		this.addDefault(defaults, Messages.DefaultFlagUnSet, "That flag is no longer set by default in any land claims.", null);
+
 		this.addDefault(defaults, Messages.ServerFlagSet, "Set flag for entire server (all worlds).", null);
 		this.addDefault(defaults, Messages.ServerFlagUnSet, "That flag is no longer set at the server level.", null);
 		this.addDefault(defaults, Messages.WorldFlagSet, "Set flag for this world.", null);
@@ -55,24 +47,12 @@ public class FlagsDataStore {
 
 		this.addDefault(defaults, Messages.UpdateGPForSubdivisionFlags, "Until you update GriefPrevention, you may only apply flags to top-level land claims.  You're currently standing in a subclaim/subdivision.", null);
 
-		this.addDefault(defaults, Messages.DisableMonsterSpawns, "Disabled monster spawns in this land claim.", null);
-		this.addDefault(defaults, Messages.EnableMonsterSpawns, "Re-enabled monster spawns in this land claim.", null);
-
-		this.addDefault(defaults, Messages.DisableMobSpawns, "Now blocking living entity (mob) spawns in this land claim.", null);
-		this.addDefault(defaults, Messages.EnableMobSpawns, "Stopped blocking living entity (mob) spawns in this land claim.", null);
-
 		this.addDefault(defaults, Messages.DisableMobDamage, "Now blocking environmental and monster damage to passive and named mobs in this land claim.", null);
 		this.addDefault(defaults, Messages.EnableMobDamage, "Stopped blocking environmental and monster damage to passive and named mobs in this land claim.", null);
 
-		this.addDefault(defaults, Messages.AddEnablePvP, "Disabled GriefPrevention and GPFlags player vs. player combat limitations in this land claim.", null);
-		this.addDefault(defaults, Messages.RemoveEnabledPvP, "GriefPrevention and GPFlags may now limit player combat in this land claim.", null);
-
-		this.addDefault(defaults, Messages.MessageRequired, "Please specify a message to send.", null);
 		this.addDefault(defaults, Messages.CommandRequired, "Please specify a command line to execute.", null);
 		this.addDefault(defaults, Messages.ConsoleCommandRequired, "Please specify a command line(s) to execute.  You may find the %owner%, %name% and %uuid% placeholders useful.  Separate multiple command lines with a semicolon (;).", null);
 		this.addDefault(defaults, Messages.PlayerCommandRequired, "Please specify a player command line(s) to execute.  You may find the %owner%, %name% and %uuid% placeholders useful.  Separate multiple command lines with a semicolon (;).\"", null);
-		this.addDefault(defaults, Messages.AddedEnterMessage, "Players entering this land claim will now receive this message: {0}", "0: message to send");
-		this.addDefault(defaults, Messages.RemovedEnterMessage, "Players entering this land claim will not receive any message.", null);
 
 		this.addDefault(defaults, Messages.AddedExitMessage, "Players exiting this land claim will now receive this message: {0}", "0: message to send");
 		this.addDefault(defaults, Messages.RemovedExitMessage, "Players exiting this land claim will not receive any message.", null);

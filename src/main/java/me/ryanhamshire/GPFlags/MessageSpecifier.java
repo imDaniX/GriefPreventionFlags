@@ -1,5 +1,6 @@
 package me.ryanhamshire.GPFlags;
 
+@Deprecated
 public class MessageSpecifier {
 
     Messages messageID;
