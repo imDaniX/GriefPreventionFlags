@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.PlayerData;
 import org.bukkit.Bukkit;
@@ -46,21 +51,21 @@ public class FlagDef_ExitCommand_Owner extends PlayerMovementFlagDefinition {
     {
         if(parameters.isEmpty())
         {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.ConsoleCommandRequired));
+            return new SetFlagResult(false, Messages.COMMAND_CONSOLE_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters)
+    public Message getSetMessage()
     {
-        return new MessageSpecifier(Messages.AddedExitCommand, parameters);
+        return Messages.EXIT_COMMAND_ADDED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage()
+    public Message getUnSetMessage()
     {
-        return new MessageSpecifier(Messages.RemovedExitCommand);
+        return Messages.EXIT_COMMAND_REMOVED;
     }
 }

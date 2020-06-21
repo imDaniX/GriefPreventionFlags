@@ -3,9 +3,9 @@ package me.ryanhamshire.GPFlags.flags;
 import me.ryanhamshire.GPFlags.Flag;
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.GameMode;
@@ -44,13 +44,13 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
                 if (player.getLocation().getY() - block.getY() >= 4) {
                     GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 }
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
                 return true;
             }
             if (player.getAllowFlight() && mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR &&
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
             return true;
         }
@@ -60,7 +60,7 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
 
         if (claim.allowAccess(player) == null) {
             player.setAllowFlight(true);
-            GPFlags.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
+            GPFlags.sendMessage(player, TextMode.SUCCESS, Messages.FLIGHT_ENTER_ENABLED.getText());
             return true;
         } else {
             GameMode mode = player.getGameMode();
@@ -68,12 +68,12 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
             if (player.getAllowFlight() && mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR &&
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
         }
         return true;
@@ -106,13 +106,13 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.OwnerMemberFlightEnabled);
+    public Message getSetMessage() {
+        return Messages.FLIGHT_OWNER_MEMBER_ENABLED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.OwnerMemberFlightDisabled);
+    public Message getUnSetMessage() {
+        return Messages.FLIGHT_OWNER_MEMBER_DISABLED;
     }
 
 }

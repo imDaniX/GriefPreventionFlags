@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +26,7 @@ public class FlagDef_CommandBlackList extends CommandListFlagDefinition {
 
         if (this.commandInList(flag.parameters, event.getMessage())) {
             event.setCancelled(true);
-            GPFlags.sendMessage(player, TextMode.Err, Messages.CommandBlockedHere);
+            player.sendMessage(Messages.COMMAND_BLOCKED_HERE.getText(TextMode.ERROR));
         }
     }
 
@@ -35,13 +40,13 @@ public class FlagDef_CommandBlackList extends CommandListFlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableCommandBlackList);
+	public Message getSetMessage() {
+        return Messages.COMMAND_BLACKLIST_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableCommandBlackList);
+    public Message getUnSetMessage() {
+        return Messages.COMMAND_BLACKLIST_DISABLE;
     }
 
     @Override

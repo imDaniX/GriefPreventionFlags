@@ -1,11 +1,14 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import com.gmail.nossr50.events.hardcore.McMMOPlayerDeathPenaltyEvent;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-
-import com.gmail.nossr50.events.hardcore.McMMOPlayerDeathPenaltyEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,13 +34,13 @@ public class FlagDef_NoMcMMODeathPenalty extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoMcMMODeathPenalty);
+	public Message getSetMessage() {
+        return Messages.NO_MCMMO_PENALTY_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoMcMMODeathPenalty);
+    public Message getUnSetMessage() {
+        return Messages.NO_MCMMO_PENALTY_DISABLE;
     }
 
     @Override

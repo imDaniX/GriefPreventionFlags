@@ -1,7 +1,13 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
-import org.bukkit.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
+import org.bukkit.Location;
+import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -56,12 +62,12 @@ public class FlagDef_PlayerWeather extends PlayerMovementFlagDefinition implemen
     {
         if(parameters.isEmpty())
         {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.PlayerWeatherRequired));
+            return new SetFlagResult(false, Messages.PLAYER_WEATHER_REQUIRED);
         }
         if(!parameters.equalsIgnoreCase("sun") && !parameters.equalsIgnoreCase("rain")) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.PlayerWeatherRequired));
+            return new SetFlagResult(false, Messages.PLAYER_WEATHER_REQUIRED);
         }
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
@@ -70,13 +76,13 @@ public class FlagDef_PlayerWeather extends PlayerMovementFlagDefinition implemen
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.PlayerWeatherSet, parameters);
+	public Message getSetMessage() {
+        return Messages.PLAYER_WEATHER_SET;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.PlayerWeatherUnSet);
+    public Message getUnSetMessage() {
+        return Messages.PLAYER_WEATHER_UNSET;
     }
 
 }

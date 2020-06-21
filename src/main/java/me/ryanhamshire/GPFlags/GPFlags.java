@@ -1,8 +1,75 @@
 package me.ryanhamshire.GPFlags;
 
 import com.google.common.io.Files;
-import me.ryanhamshire.GPFlags.flags.*;
+import me.ryanhamshire.GPFlags.flags.FlagDef_AllowPvP;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ChangeBiome;
+import me.ryanhamshire.GPFlags.flags.FlagDef_CommandBlackList;
+import me.ryanhamshire.GPFlags.flags.FlagDef_CommandWhiteList;
+import me.ryanhamshire.GPFlags.flags.FlagDef_EnterCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_EnterCommand_Members;
+import me.ryanhamshire.GPFlags.flags.FlagDef_EnterCommand_Owner;
+import me.ryanhamshire.GPFlags.flags.FlagDef_EnterMessage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_EnterPlayerCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ExitCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ExitCommand_Members;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ExitCommand_Owner;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ExitMessage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_ExitPlayerCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_HealthRegen;
+import me.ryanhamshire.GPFlags.flags.FlagDef_InfiniteArrows;
+import me.ryanhamshire.GPFlags.flags.FlagDef_KeepInventory;
+import me.ryanhamshire.GPFlags.flags.FlagDef_KeepLevel;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NetherPortalConsoleCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NetherPortalPlayerCommand;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoChorusFruit;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoCombatLoot;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoEnderPearl;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoEnter;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoEnterPlayer;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoExpiration;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoExplosionDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoFallDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoFireDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoFireSpread;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoFlight;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoFluidFlow;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoGrowth;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoHunger;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoIceForm;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoItemDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoItemDrop;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoItemPickup;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoLeafDecay;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoLootProtection;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMcMMODeathPenalty;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMcMMOSkills;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMcMMOXP;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMobDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMobSpawns;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMobSpawnsType;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoMonsterSpawns;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoOpenDoors;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoPetDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoPlayerDamage;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoPlayerDamageByMonster;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoSnowForm;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoVehicle;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoVineGrowth;
+import me.ryanhamshire.GPFlags.flags.FlagDef_NoWeatherChange;
+import me.ryanhamshire.GPFlags.flags.FlagDef_OwnerFly;
+import me.ryanhamshire.GPFlags.flags.FlagDef_OwnerMemberFly;
+import me.ryanhamshire.GPFlags.flags.FlagDef_PlayerGamemode;
+import me.ryanhamshire.GPFlags.flags.FlagDef_PlayerTime;
+import me.ryanhamshire.GPFlags.flags.FlagDef_PlayerWeather;
+import me.ryanhamshire.GPFlags.flags.FlagDef_RaidMemberOnly;
+import me.ryanhamshire.GPFlags.flags.FlagDef_RespawnLocation;
+import me.ryanhamshire.GPFlags.flags.FlagDef_SpleefArena;
+import me.ryanhamshire.GPFlags.flags.FlagDef_TrappedDestination;
+import me.ryanhamshire.GPFlags.flags.FlagDefinition;
 import me.ryanhamshire.GPFlags.listener.PlayerListener;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.MessageStore;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GPFlags.metrics.Metrics;
 import me.ryanhamshire.GPFlags.util.Current;
 import me.ryanhamshire.GPFlags.util.Legacy;
@@ -28,7 +95,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * <b>Main GriefPrevention Flags class</b>
@@ -40,8 +106,11 @@ public class GPFlags extends JavaPlugin {
     //for convenience, a reference to the instance of this plugin
     private static GPFlags instance;
 
-    //this handles customizable messages
+    //this handles.. some file names
     private FlagsDataStore flagsDataStore;
+
+    //this handles customizable messages
+    private MessageStore messageStore;
 
     //this handles flags
     private final FlagManager flagManager = new FlagManager();
@@ -66,6 +135,8 @@ public class GPFlags extends JavaPlugin {
     }
 
     public void onEnable() {
+        this.messageStore = new MessageStore();
+        Messages.register(this.messageStore);
     	this.playerListener = new PlayerListener();
     	Bukkit.getPluginManager().registerEvents(playerListener, this);
 
@@ -96,6 +167,7 @@ public class GPFlags extends JavaPlugin {
     private void loadConfig() {
         this.flagManager.clear();
         this.worldSettingsManager = new WorldSettingsManager();
+        this.messageStore.reload(YamlConfiguration.loadConfiguration(new File(FlagsDataStore.messagesFilePath)));
 
         //load the config if it exists
         FileConfiguration inConfig = YamlConfiguration.loadConfiguration(new File(FlagsDataStore.configFilePath));
@@ -159,8 +231,6 @@ public class GPFlags extends JavaPlugin {
         } catch (IOException exception) {
             addLogEntry("Unable to write to the configuration file at \"" + FlagsDataStore.configFilePath + "\"");
         }
-
-        this.flagsDataStore = new FlagsDataStore();
 
         //register flag definitions
         if (!this.registeredFlagDefinitions) {
@@ -260,12 +330,12 @@ public class GPFlags extends JavaPlugin {
 
         try {
             File flagsFile = new File(FlagsDataStore.flagsFilePath);
-            List<MessageSpecifier> errors = this.flagManager.load(flagsFile);
+            List<Message> errors = this.flagManager.load(flagsFile);
             if (errors.size() > 0) {
                 File errorFile = new File(FlagsDataStore.flagsErrorFilePath);
                 Files.copy(flagsFile, errorFile);
-                for (MessageSpecifier error : errors) {
-                    GPFlags.addLogEntry("Load Error: " + this.flagsDataStore.getMessage(error.messageID, error.messageParams));
+                for (Message error : errors) {
+                    GPFlags.addLogEntry("Load Error: " + error.getText());
                 }
                 GPFlags.addLogEntry("Problems encountered reading the flags data file! " +
                         "Please share this log and your 'flagsError.yml' file with the developer.");
@@ -311,7 +381,7 @@ public class GPFlags extends JavaPlugin {
         }
         if (cmd.getName().equalsIgnoreCase("GPFReload")) {
             this.loadConfig();
-            GPFlags.sendMessage(player, TextMode.Success, Messages.ReloadComplete);
+            sender.sendMessage(Messages.RELOAD_COMPLETE.getText(TextMode.SUCCESS));
             return true;
         } else if (cmd.getName().equalsIgnoreCase("SetDefaultClaimFlag")) {
             if (args.length < 1) return false;
@@ -320,17 +390,17 @@ public class GPFlags extends JavaPlugin {
 
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             if (!def.getFlagType().contains(FlagDefinition.FlagType.CLAIM)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInClaim);
+                sender.sendMessage(Messages.NO_FLAG_IN_CLAIM.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -340,12 +410,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(FlagManager.DEFAULT_FLAG_ID, def, true, params);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.DefaultFlagSet);
+                sender.sendMessage(Messages.DEFAULT_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -355,22 +424,21 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(FlagManager.DEFAULT_FLAG_ID, def);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.DefaultFlagUnSet);
+                sender.sendMessage(Messages.DEFAULT_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -380,17 +448,17 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             if (!def.getFlagType().contains(FlagDefinition.FlagType.SERVER)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInServer);
+                sender.sendMessage(Messages.NO_FLAG_ON_SERVER.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -400,12 +468,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag("everywhere", def, true, params);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.ServerFlagSet);
+                sender.sendMessage(Messages.SERVER_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -415,22 +482,21 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             SetFlagResult result = this.flagManager.unSetFlag("everywhere", def);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.ServerFlagUnSet);
+                sender.sendMessage(Messages.SERVER_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -441,24 +507,24 @@ public class GPFlags extends JavaPlugin {
             if (args.length < 2) return false;
             player = Bukkit.getPlayer(args[0]);
             if (player == null) {
-                sendMessage(sender, "&c" + args[0] + " &7is not online");
+                sender.sendMessage(Util.clr( "&c" + args[0] + " &7is not online"));
                 return false;
             }
             PlayerData playerData = GriefPrevention.instance.dataStore.getPlayerData(player.getUniqueId());
             Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, playerData.lastClaim);
             if (claim == null || claim.allowEdit(player) != null) {
-                sendMessage(sender, "&cThis player is not standing in a claim they own");
+                sender.sendMessage(Util.clr("&cThis player is not standing in a claim they own"));
                 return false;
             }
 
             String flagName = args[1];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                sendMessage(sender, "&c" + args[1] + "&7 is not a valid flag");
+                sender.sendMessage(Util.clr("&c" + args[1] + "&7 is not a valid flag"));
                 return false;
             }
             if (!def.getFlagType().contains(FlagDefinition.FlagType.CLAIM)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInClaim);
+                sender.sendMessage(Messages.NO_FLAG_IN_CLAIM.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -476,11 +542,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(claim.getID().toString(), def, true, params);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
-            GPFlags.sendMessage(sender, color, result.message.messageID, result.message.messageParams);
+            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.message.getText(color, result.parameters));
             if (result.success) {
                 this.flagManager.save();
-                sendMessage(sender, "&7Flag &b" + def.getName() + " &7successfully set in &b" + player.getName() + "&7's claim.");
+                sender.sendMessage(Util.clr("&7Flag &b" + def.getName() + " &7successfully set in &b" + player.getName() + "&7's claim."));
                 return true;
             }
 
@@ -497,17 +563,17 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             if (!def.getFlagType().contains(FlagDefinition.FlagType.WORLD)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInWorld);
+                sender.sendMessage(Messages.NO_FLAG_IN_WORLD.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -517,12 +583,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(player.getWorld().getName(), def, true, params);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.WorldFlagSet);
+                sender.sendMessage(Messages.WORLD_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -532,22 +597,21 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(player.getWorld().getName(), def);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             if (result.success) {
-                GPFlags.sendMessage(player, color, Messages.WorldFlagUnSet);
+                sender.sendMessage(Messages.WORLD_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
             }
 
             return true;
@@ -598,18 +662,18 @@ public class GPFlags extends JavaPlugin {
             }
 
             if (builder1.length() > 0)
-                GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsClaim, builder1.toString());
+                sender.sendMessage(Messages.FLAGS_CLAIM.getText(TextMode.INFO, builder1.toString()));
             if (builder2.length() > 0)
-                GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsParent, builder2.toString());
+                sender.sendMessage(Messages.FLAGS_PARENT.getText(TextMode.INFO, builder2.toString()));
             if (builder3.length() > 0)
-                GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsDefault, builder3.toString());
+                sender.sendMessage(Messages.FLAGS_DEFAULT.getText(TextMode.INFO, builder3.toString()));
             if (builder4.length() > 0)
-                GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsWorld, builder4.toString());
+                sender.sendMessage(Messages.FLAGS_WORLD.getText(TextMode.INFO, builder4.toString()));
             if (builder5.length() > 0)
-                GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsServer, builder5.toString());
+                sender.sendMessage(Messages.FLAGS_SERVER.getText(TextMode.INFO, builder5.toString()));
 
             if (!flagsFound) {
-                GPFlags.sendMessage(player, TextMode.Info, Messages.NoFlagsHere);
+                sender.sendMessage(Messages.NO_FLAGS_HERE.getText(TextMode.INFO));
             }
 
             return true;
@@ -619,13 +683,13 @@ public class GPFlags extends JavaPlugin {
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, playerData.lastClaim);
 
         if (claim == null) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.StandInAClaim);
+            sender.sendMessage(Messages.STAND_IN_CLAIM.getText(TextMode.ERROR));
             return true;
         }
 
         Long claimID = claim.getID();
         if (claimID == null || claimID == -1) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.UpdateGPForSubdivisionFlags);
+            sender.sendMessage(Messages.UPDATE_SUBDIVISION_FLAGS.getText(TextMode.ERROR));
             return true;
         }
 
@@ -635,22 +699,22 @@ public class GPFlags extends JavaPlugin {
             String flagName = args[0];
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             if (!def.getFlagType().contains(FlagDefinition.FlagType.CLAIM)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInClaim);
+                sender.sendMessage(Messages.NO_FLAG_IN_CLAIM.getText(TextMode.ERROR));
                 return true;
             }
 
             if (claim.allowEdit(player) != null) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NotYourClaim);
+                sender.sendMessage(Messages.NOT_YOUR_CLAIM.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -665,13 +729,13 @@ public class GPFlags extends JavaPlugin {
             for (Flag flag : flags) {
                 if (args[0].equalsIgnoreCase("OwnerFly")) {
                     if (flag.flagDefinition.getName().equalsIgnoreCase("OwnerMemberFly")) {
-                        GPFlags.sendMessage(player, TextMode.Warn, Messages.NoOwnerFlag);
+                        sender.sendMessage(Messages.FLIGHT_NO_OWNER_FLAG.getText(TextMode.WARNING));
                         return true;
                     }
                 }
                 if (args[0].equalsIgnoreCase("OwnerMemberFly")) {
                     if (flag.flagDefinition.getName().equalsIgnoreCase("OwnerFly")) {
-                        GPFlags.sendMessage(player, TextMode.Warn, Messages.NoOwnerFlag);
+                        sender.sendMessage(Messages.FLIGHT_NO_OWNER_FLAG.getText(TextMode.WARNING));
                         return true;
                     }
                 }
@@ -690,7 +754,7 @@ public class GPFlags extends JavaPlugin {
                 if (!player.hasPermission("gpflags.nomobspawnstype.*") && !player.hasPermission("gpflags.admin.*")) {
                     for (String type : params[0].split(";")) {
                         if (!player.hasPermission("gpflags.nomobspawnstype." + type)) {
-                            GPFlags.sendMessage(player, TextMode.Err, Messages.MobTypePerm, type);
+                            sender.sendMessage(Messages.MOB_TYPE_PERMISSION.getText(TextMode.ERROR));
                             return true;
                         }
                     }
@@ -698,8 +762,8 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(claimID.toString(), def, true, params);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
-            GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.message.getText(color, result.parameters));
             if (result.success) this.flagManager.save();
 
             return true;
@@ -710,17 +774,17 @@ public class GPFlags extends JavaPlugin {
 
             FlagDefinition def = this.flagManager.getFlagDefinitionByName(flagName);
             if (def == null) {
-                GPFlags.sendMessage(player, TextMode.Err, this.getFlagDefsMessage(player));
+                sender.sendMessage(Messages.INVALID_FLAG.getText(TextMode.ERROR, getFlagDefsMessage(sender)));
                 return true;
             }
 
             if (!this.playerHasPermissionForFlag(def, player)) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+                sender.sendMessage(Messages.NO_FLAG_PERMISSION.getText(TextMode.ERROR));
                 return true;
             }
 
             if (claim.allowEdit(player) != null) {
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NotYourClaim);
+                sender.sendMessage(Messages.NOT_YOUR_CLAIM.getText(TextMode.ERROR));
                 return true;
             }
 
@@ -731,8 +795,8 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(claimID.toString(), def);
-            ChatColor color = result.success ? TextMode.Success : TextMode.Err;
-            GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
+            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.message.getText(color));
             if (result.success) this.flagManager.save();
 
             return true;
@@ -745,29 +809,6 @@ public class GPFlags extends JavaPlugin {
         String flagName = flagDef.getName();
         return player == null || player.hasPermission("gpflags.allflags") || player.hasPermission("gpflags." +
                 flagName) || player.hasPermission("gpflags." + flagName.toLowerCase());
-    }
-
-    public void onDisable() {
-        this.flagsDataStore.close();
-    }
-
-    private static void sendMessage(CommandSender player, ChatColor color, MessageSpecifier specifier) {
-        sendMessage(player, color, specifier.messageID, specifier.messageParams);
-    }
-
-    //sends a formatted message to a player
-    static void sendMessage(CommandSender player, String message) {
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-    }
-    //sends a color-coded message to a player
-    public static void sendMessage(CommandSender player, ChatColor color, Messages messageID, String... args) {
-        sendMessage(player, color, messageID, 0, args);
-    }
-
-    //sends a color-coded message to a player
-    static void sendMessage(CommandSender player, ChatColor color, Messages messageID, long delayInTicks, String... args) {
-        String message = GPFlags.instance.flagsDataStore.getMessage(messageID, args);
-        sendMessage(player, color, message, delayInTicks);
     }
 
     //sends a color-coded message to a player
@@ -796,7 +837,8 @@ public class GPFlags extends JavaPlugin {
         }
     }
 
-    private MessageSpecifier getFlagDefsMessage(Permissible player) {
+    // Messages.INVALID_FLAG
+    private String getFlagDefsMessage(Permissible player) {
         StringBuilder flagDefsList = new StringBuilder();
         Collection<FlagDefinition> defs = this.flagManager.getFlagDefinitions();
         for (FlagDefinition def : defs) {
@@ -805,7 +847,7 @@ public class GPFlags extends JavaPlugin {
             }
         }
 
-        return new MessageSpecifier(Messages.InvalidFlagDefName, flagDefsList.toString());
+        return flagDefsList.toString();
     }
 
     @Override
@@ -854,5 +896,9 @@ public class GPFlags extends JavaPlugin {
     public PlayerListener getPlayerListener() {
     	return this.playerListener;
 	}
+
+	public MessageStore getMessageStore() {
+        return messageStore;
+    }
 
 }

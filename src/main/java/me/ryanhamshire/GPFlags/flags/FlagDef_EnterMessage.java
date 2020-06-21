@@ -3,10 +3,10 @@ package me.ryanhamshire.GPFlags.flags;
 import me.ryanhamshire.GPFlags.Flag;
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
@@ -20,7 +20,7 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
 
     public FlagDef_EnterMessage(FlagManager manager, GPFlags plugin) {
         super(manager, plugin);
-        this.prefix = plugin.getFlagsDataStore().getMessage(Messages.EnterExitPrefix);
+        this.prefix = Messages.ENTER_EXIT_PREFIX.getText();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
             message = message.replace("%owner%", claim.getOwnerName()).replace("%name%", player.getName());
         }
 
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        GPFlags.sendMessage(player, TextMode.INFO, prefix + message);
         return true;
     }
 
@@ -47,7 +47,7 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
         String message = flag.parameters;
         message = message.replace("%owner%", claim.getOwnerName()).replace("%name%", player.getName());
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        GPFlags.sendMessage(player, TextMode.INFO, prefix + message);
     }
 
     @Override
@@ -58,20 +58,20 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
     @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (parameters.isEmpty()) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.MessageRequired));
+            return new SetFlagResult(false, Messages.MESSAGE_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.AddedEnterMessage, parameters);
+    public Message getSetMessage() {
+        return Messages.ENTER_MESSAGE_ADDED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.RemovedEnterMessage);
+    public Message getUnSetMessage() {
+        return Messages.ENTER_MESSAGE_REMOVED;
     }
 
 }

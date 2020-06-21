@@ -1,6 +1,10 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.CommandList;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Messages;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,9 +36,9 @@ public abstract class CommandListFlagDefinition extends FlagDefinition
     {
         if(parameters.isEmpty())
         {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.CommandListRequired));
+            return new SetFlagResult(false, Messages.COMMAND_LIST_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage());
     }
 }

@@ -3,6 +3,7 @@ package me.ryanhamshire.GPFlags;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import me.ryanhamshire.GPFlags.flags.FlagDefinition;
+import me.ryanhamshire.GPFlags.message.Message;
 import me.ryanhamshire.GriefPrevention.Claim;
 import org.apache.commons.lang.Validate;
 import org.bukkit.block.Biome;
@@ -66,21 +67,17 @@ public class FlagManager implements TabCompleter {
     }
     
     public SetFlagResult setFlag(String id, FlagDefinition def, boolean isActive, String... args) {
-        StringBuilder parameters = new StringBuilder();
-        for(String arg : args) {
-            parameters.append(arg).append(" ");
-        }
-        parameters = new StringBuilder(parameters.toString().trim());
+        String parameters = String.join(" ", args);
         
         SetFlagResult result;
         if(isActive) {
-            result = def.ValidateParameters(parameters.toString());
+            result = def.ValidateParameters(parameters);
             if(!result.success) return result;
         } else {
             result = new SetFlagResult(true, def.getUnSetMessage());
         }
         
-        Flag flag = new Flag(def, parameters.toString());
+        Flag flag = new Flag(def, parameters);
         flag.setSet(isActive);
         ConcurrentHashMap<String, Flag> claimFlags = this.flags.get(id);
         if(claimFlags == null) {
@@ -185,12 +182,12 @@ public class FlagManager implements TabCompleter {
         }
     }
     
-    List<MessageSpecifier> load(String input) throws InvalidConfigurationException {
+    List<Message> load(String input) throws InvalidConfigurationException {
         this.flags.clear();
         YamlConfiguration yaml = new YamlConfiguration();
         yaml.loadFromString(input);
 
-        ArrayList<MessageSpecifier> errors = new ArrayList<>();
+        ArrayList<Message> errors = new ArrayList<>();
         Set<String> claimIDs = yaml.getKeys(false);
         for(String claimID : claimIDs) {
             Set<String> flagNames = yaml.getConfigurationSection(claimID).getKeys(false);
@@ -248,7 +245,7 @@ public class FlagManager implements TabCompleter {
         Files.write(fileContent.getBytes("UTF-8"), file);
     }
     
-    public List<MessageSpecifier> load(File file) throws IOException, InvalidConfigurationException {
+    public List<Message> load(File file) throws IOException, InvalidConfigurationException {
         if(!file.exists()) return this.load("");
         
         List<String> lines = Files.readLines(file, Charset.forName("UTF-8"));

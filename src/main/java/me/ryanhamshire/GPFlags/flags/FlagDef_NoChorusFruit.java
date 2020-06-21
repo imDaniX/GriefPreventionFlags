@@ -1,6 +1,10 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -36,13 +40,13 @@ public class FlagDef_NoChorusFruit extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoChorusFruit);
+	public Message getSetMessage() {
+        return Messages.NO_CHORUS_FRUIT_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoChorusFruit);
+    public Message getUnSetMessage() {
+        return Messages.NO_CHORUS_FRUIT_DISABLE;
     }
 
     @Override

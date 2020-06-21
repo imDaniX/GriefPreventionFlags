@@ -1,6 +1,10 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,15 +47,15 @@ public class FlagDef_NoFireDamage extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters)
+	public Message getSetMessage()
     {
-        return new MessageSpecifier(Messages.EnableNoFireDamage);
+        return Messages.NO_FIRE_DAMAGE_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage()
+    public Message getUnSetMessage()
     {
-        return new MessageSpecifier(Messages.DisableNoFireDamage);
+        return Messages.NO_FIRE_DAMAGE_DISABLE;
     }
 
     @Override

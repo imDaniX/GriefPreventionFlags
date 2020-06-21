@@ -1,8 +1,8 @@
 package me.ryanhamshire.GPFlags.message;
 
-import org.bukkit.configuration.ConfigurationSection;
+import me.ryanhamshire.GPFlags.util.Util;
 
-public enum Messages implements CustomizableMessage {
+public enum Messages implements Message {
 
     RELOAD_COMPLETE("ReloadComplete", "Reloaded config settings and flags from disk.  If you've updated your GPFlags jar file, you MUST reboot your server to activate the update."),
 
@@ -34,8 +34,8 @@ public enum Messages implements CustomizableMessage {
 
     UPDATE_SUBDIVISION_FLAGS("UpdateGPForSubdivisionFlags", "Until you update GriefPrevention, you may only apply flags to top-level land claims.  You're currently standing in a subclaim/subdivision."),
 
-    MONSTER_SPAWNS_DISABLE("DisableMonsterSpawns", "Disabled monster spawns in this land claim."),
-    MONSTER_SPAWNS_ENABLE("EnableMonsterSpawns", "Re-enabled monster spawns in this land claim."),
+    NO_MONSTER_SPAWNS_DISABLE("DisableMonsterSpawns", "Disabled monster spawns in this land claim."),
+    NO_MONSTER_SPAWNS_ENABLE("EnableMonsterSpawns", "Re-enabled monster spawns in this land claim."),
 
     PVP_ENABLE("AddEnablePvP", "Disabled GriefPrevention and GPFlags player vs. player combat limitations in this land claim."),
     PVP_DISABLE("RemoveEnabledPvP", "GriefPrevention and GPFlags may now limit player combat in this land claim."),
@@ -44,7 +44,8 @@ public enum Messages implements CustomizableMessage {
     ENTER_MESSAGE_ADDED("AddedEnterMessage", "Players entering this land claim will now receive this message: {0}", "0: message to send"),
     ENTER_MESSAGE_REMOVED("RemovedEnterMessage", "Players entering this land claim will not receive any message."),
     EXIT_MESSAGE_ADDED("AddedExitMessage", "Players exiting this land claim will now receive this message: {0}", "0: message to send"),
-    REMOVED_EXIT_REMOVE("RemovedExitMessage", "Players exiting this land claim will not receive any message."),
+    EXIT_MESSAGE_REMOVED("RemovedExitMessage", "Players exiting this land claim will not receive any message."),
+    // TODO: Implement "{0}" ?
     ENTER_EXIT_PREFIX("EnterExitPrefix", "", "This prefix will be added to all enter/exit message flags"),
 
     MOB_DAMAGE_DISABLE("DisableMobDamage", "Now blocking environmental and monster damage to passive and named mobs in this land claim."),
@@ -124,13 +125,13 @@ public enum Messages implements CustomizableMessage {
     NO_EXPIRATION_ENABLE("EnableNoExpiration", "Claims here will never expire."),
     NO_EXPIRATION_DISABLE("DisableNoExpiration", "Stopped blocking claim expiration here.."),
 
-    NO_PEARL_ENABLE("EnableNoEnderPearl", "Now blocking ender pearl teleportation to/from this area."),
-    NO_PEARL_DISABLE("DisableNoEnderPearl", "Stopped blocking ender pearl teleportation to/from this area."),
-    NO_PEARL_IN("NoEnderPearlInClaim", "{p}, you can not use enderpearls in {o}'s claim",
+    NO_ENDERPEARL_ENABLE("EnableNoEnderPearl", "Now blocking ender pearl teleportation to/from this area."),
+    NO_ENDERPEARL_DISABLE("DisableNoEnderPearl", "Stopped blocking ender pearl teleportation to/from this area."),
+    NO_ENDERPEARL_IN("NoEnderPearlInClaim", "{p}, you can not use enderpearls in {o}'s claim",
         "o: owner of claim" + " p: event player"),
-    NO_PEARL_TO("NoEnderPearlToClaim", "{p}, you can not use enderpearls to teleprot to {o}'s claim",
+    NO_ENDERPEARL_TO("NoEnderPearlToClaim", "{p}, you can not use enderpearls to teleprot to {o}'s claim",
         "o: owner of claim" + " p: event player"),
-    NO_PEARL_WORLD("NoEnderPearlInWorld", "{p}, you can not use enderpearls in this world",
+    NO_ENDERPEARL_WORLD("NoEnderPearlInWorld", "{p}, you can not use enderpearls in this world",
         "p: event player"),
 
     NO_MCMMO_SKILLS_ENABLE("EnableNoMcMMOSkills", "Now blocking McMMO skill use in this area."),
@@ -232,6 +233,9 @@ public enum Messages implements CustomizableMessage {
     NO_MOB_SPAWNS_TYPES_ENABLE("EnabledNoMobSpawnsType", "The spawning of {0} has been disabled in this area", "0: Mob Types"),
     NO_MOB_SPAWNS_TYPES_DISABLE("DisabledNoMobSpawnsType", "The flag mobs will now be able to spawn again in this area"),
 
+    NO_MOB_SPAWNS_ENABLE("EnableMobSpawns", "Stopped blocking living entity (mob) spawns in this land claim."),
+    NO_MOB_SPAWNS_DISABLE("DisableMobSpawns", "Now blocking living entity (mob) spawns in this land claim."),
+
     NO_ITEM_DAMAGE_ENABLE("EnabledNoItemDamage", "Items will no longer take damage in this area"),
     NO_ITEM_DAMAGE_DISABLE("DisabledNoItemDamage", "Items will continue to take damage in this area"),
 
@@ -239,22 +243,45 @@ public enum Messages implements CustomizableMessage {
     RAID_MEMBER_DISABLE("DisabledRaidMemberOnly", "Anyone can trigger raids in this area"),
     RAID_MEMBERS_DENY("RaidMemberOnlyDeny", "You can not initiate a raid in this area");
 
-    private final String path;
-    private final String def;
+    private final String id;
+    private final String defText;
     private String text;
     private String note;
 
-    Messages(String path, String def) {
-        this.path = "Messages." + path;
-        this.def = CustomizableMessage.clr(def);
-        text = this.def;
+    Messages(String id, String defText) {
+        this(id, defText, null);
     }
 
-    Messages(String path, String def, String note) {
-        this.path = "Messages." + path;
-        this.def = CustomizableMessage.clr(def);
-        text = this.def;
+    Messages(String id, String defText, String note) {
+        this.id = id;
+        this.defText = Util.clr(defText);
+        this.text = this.defText;
         this.note = note;
+    }
+
+    /* Alternative placeholders system
+    Messages(String id, String def, String note, String... placeholders) {
+        this.id = id;
+        this.defText = Util.clr(defText);
+        this.text = this.defText;
+        this.note = note;
+        this.placeholders = new String[placeholders.length];
+        for(int i = 0; i < placeholders.length; i++)
+            this.placeholders[i] = "{" + placeholders[i] + "}";
+    }
+
+    @Override
+    public String getText(String... notes) {
+        String text = getText();
+        for (int i = 0; i < notes.length; i++)
+            text = text.replace(placeholders[i], notes[i]);
+        return text;
+    }
+     */
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -268,10 +295,17 @@ public enum Messages implements CustomizableMessage {
     }
 
     @Override
-    public void load(ConfigurationSection cfg) {
-        String text = cfg.getString(path + ".Text");
-        this.text = text == null ? def : CustomizableMessage.clr(text);
-        String note = cfg.getString(path + ".Note");
-        this.note = note == null ? null : CustomizableMessage.clr(text);
+    public void setNote(String note) {
+        this.note = note == null ? null : Util.clr(note);
+    }
+
+    @Override
+    public void setText(String text) {
+        this.text = text == null ? defText : Util.clr(text);
+    }
+
+    public static void register(MessageStore store) {
+        for(Messages msg : Messages.values())
+            store.register(msg);
     }
 }

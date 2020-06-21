@@ -1,13 +1,27 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.WorldSettings;
+import me.ryanhamshire.GPFlags.WorldSettingsManager;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.EntityEventHandler;
 import me.ryanhamshire.GriefPrevention.events.PreventPvPEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
@@ -40,7 +54,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
             if (this.GetFlagInstanceAtLocation(lastLocation, player) != null) {
                 if (!settings.pvpRequiresClaimFlag) return true;
                 if (!settings.pvpExitClaimMessageEnabled) return true;
-                GPFlags.sendMessage(player, TextMode.Success, settings.pvpExitClaimMessage);
+                GPFlags.sendMessage(player, TextMode.SUCCESS, settings.pvpExitClaimMessage);
             }
             return true;
         }
@@ -50,7 +64,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
         if (!settings.pvpRequiresClaimFlag) return true;
         if (!settings.pvpEnterClaimMessageEnabled) return true;
 
-        GPFlags.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
+        GPFlags.sendMessage(player, TextMode.WARNING, settings.pvpEnterClaimMessage);
         return true;
     }
 
@@ -70,7 +84,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
         WorldSettings settings = this.settingsManager.get(player.getWorld());
         if (!settings.pvpRequiresClaimFlag) return;
         if (!settings.pvpEnterClaimMessageEnabled) return;
-        GPFlags.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
+        GPFlags.sendMessage(player, TextMode.WARNING, settings.pvpEnterClaimMessage);
 
     }
 
@@ -128,7 +142,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
 
         //otherwise disallow
         event.setCancelled(true);
-        GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        GPFlags.sendMessage(thrower, TextMode.ERROR, settings.pvpDeniedMessage);
     }
 
     //when an entity is set on fire
@@ -199,7 +213,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
             }
         }
         if (sendErrorMessagesToPlayers && damager instanceof Player)
-            GPFlags.sendMessage(damager, TextMode.Err, settings.pvpDeniedMessage);
+            GPFlags.sendMessage(damager, TextMode.ERROR, settings.pvpDeniedMessage);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -263,13 +277,13 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.AddEnablePvP);
+	public Message getSetMessage() {
+        return Messages.PVP_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.RemoveEnabledPvP);
+    public Message getUnSetMessage() {
+        return Messages.PVP_DISABLE;
     }
 
     @Override

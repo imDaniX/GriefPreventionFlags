@@ -1,17 +1,16 @@
 package me.ryanhamshire.GPFlags.util;
 
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-
-import java.util.HashMap;
 
 @SuppressWarnings("WeakerAccess")
 public class Util {
@@ -60,11 +59,11 @@ public class Util {
             if (loc.getY() - block.getY() >= 4) {
                 GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
             }
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+            GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
         }
         if (player.getAllowFlight() && !canFly(player)) {
             player.setAllowFlight(false);
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+            GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
         }
     }
 
@@ -74,4 +73,7 @@ public class Util {
                 player.hasPermission("gpflags.bypass.fly") || player.hasPermission("gpflags.bypass");
     }
 
+    public static String clr(String str) {
+        return ChatColor.translateAlternateColorCodes('&', str);
+    }
 }

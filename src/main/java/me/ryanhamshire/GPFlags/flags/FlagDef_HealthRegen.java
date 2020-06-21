@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
@@ -57,31 +62,31 @@ public class FlagDef_HealthRegen extends TimedPlayerFlagDefinition {
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableHealthRegen);
+    public Message getSetMessage() {
+        return Messages.HEALTH_REGEN_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableHealthRegen);
+    public Message getUnSetMessage() {
+        return Messages.HEALTH_REGEN_DISABLE;
     }
 
     @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (parameters.isEmpty())
-            return new SetFlagResult(false, new MessageSpecifier(Messages.HealthRegenGreaterThanZero));
+            return new SetFlagResult(false, Messages.HEALTH_REGEN_INVALID);
 
         int amount;
         try {
             amount = Integer.parseInt(parameters);
             if (amount <= 0) {
-                return new SetFlagResult(false, new MessageSpecifier(Messages.HealthRegenGreaterThanZero));
+                return new SetFlagResult(false, Messages.HEALTH_REGEN_INVALID);
             }
         } catch (NumberFormatException e) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.HealthRegenGreaterThanZero));
+            return new SetFlagResult(false, Messages.HEALTH_REGEN_INVALID);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override

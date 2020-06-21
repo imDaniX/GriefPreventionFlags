@@ -1,11 +1,14 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
+import me.ryanhamshire.GriefPrevention.events.ClaimExpirationEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-
-import me.ryanhamshire.GriefPrevention.events.ClaimExpirationEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,15 +38,15 @@ public class FlagDef_NoExpiration extends FlagDefinition
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters)
+	public Message getSetMessage()
     {
-        return new MessageSpecifier(Messages.EnableNoExpiration);
+        return Messages.NO_EXPIRATION_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage()
+    public Message getUnSetMessage()
     {
-        return new MessageSpecifier(Messages.DisableNoExpiration);
+        return Messages.NO_EXPIRATION_DISABLE;
     }
 
     @Override

@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.PlayerData;
@@ -66,21 +71,21 @@ public class FlagDef_EnterCommand_Members extends PlayerMovementFlagDefinition {
     {
         if(parameters.isEmpty())
         {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.ConsoleCommandRequired));
+            return new SetFlagResult(false, Messages.COMMAND_CONSOLE_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters)
+    public Message getSetMessage()
     {
-        return new MessageSpecifier(Messages.AddedEnterCommand, parameters);
+        return Messages.ENTER_COMMAND_ADDED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage()
+    public Message getUnSetMessage()
     {
-        return new MessageSpecifier(Messages.RemovedEnterCommand);
+        return Messages.ENTER_COMMAND_REMOVED;
     }
 }

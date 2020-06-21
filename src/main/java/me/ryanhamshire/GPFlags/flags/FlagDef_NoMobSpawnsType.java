@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -78,9 +83,9 @@ public class FlagDef_NoMobSpawnsType extends FlagDefinition {
 	@Override
 	public SetFlagResult ValidateParameters(String parameters) {
 		if (parameters.isEmpty()) {
-			return new SetFlagResult(false, new MessageSpecifier(Messages.MobTypeRequired));
+			return new SetFlagResult(false, Messages.MOB_TYPE_REQUIRED);
 		}
-		return new SetFlagResult(true, this.getSetMessage(parameters));
+		return new SetFlagResult(true, this.getSetMessage(), parameters.replace(";", ", "));
 	}
 
 	@Override
@@ -89,13 +94,13 @@ public class FlagDef_NoMobSpawnsType extends FlagDefinition {
 	}
 
 	@Override
-	public MessageSpecifier getSetMessage(String parameters) {
-		return new MessageSpecifier(Messages.EnabledNoMobSpawnsType, parameters.replace(";", ", "));
+	public Message getSetMessage() {
+		return Messages.NO_MOB_SPAWNS_TYPES_ENABLE;
 	}
 
 	@Override
-	public MessageSpecifier getUnSetMessage() {
-		return new MessageSpecifier(Messages.DisabledNoMobSpawnsType);
+	public Message getUnSetMessage() {
+		return Messages.NO_MOB_SPAWNS_TYPES_DISABLE;
 	}
 
 	@Override

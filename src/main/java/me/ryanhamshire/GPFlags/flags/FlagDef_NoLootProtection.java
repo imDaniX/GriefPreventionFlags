@@ -1,9 +1,12 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
-import org.bukkit.event.EventHandler;
-
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.events.ProtectDeathDropsEvent;
+import org.bukkit.event.EventHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +33,13 @@ public class FlagDef_NoLootProtection extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoLootProtection);
+	public Message getSetMessage() {
+        return Messages.NO_LOOT_PROTECTION_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoLootProtection);
+    public Message getUnSetMessage() {
+        return Messages.NO_LOOT_PROTECTION_DISABLE;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -36,15 +40,15 @@ public class FlagDef_NoIceForm extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters)
+	public Message getSetMessage()
     {
-        return new MessageSpecifier(Messages.EnableNoIceForm);
+        return Messages.NO_ICE_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage()
+    public Message getUnSetMessage()
     {
-        return new MessageSpecifier(Messages.DisableNoIceForm);
+        return Messages.NO_ICE_DISABLE;
     }
 
     @Override

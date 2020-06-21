@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -29,7 +34,7 @@ public class FlagDef_NoVehicle extends FlagDefinition {
 				Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
 				if (flag == null) return;
 				event.setCancelled(true);
-				GPFlags.sendMessage(player, TextMode.Err, Messages.NoPlaceVehicle);
+				GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_VEHICLE_PLACE.getText());
 		}
 	}
 
@@ -43,13 +48,13 @@ public class FlagDef_NoVehicle extends FlagDefinition {
 	}
 
 	@Override
-	public MessageSpecifier getSetMessage(String parameters) {
-		return new MessageSpecifier(Messages.EnabledNoVehicle);
+	public Message getSetMessage() {
+		return Messages.NO_VEHICLE_ENABLE;
 	}
 
 	@Override
-	public MessageSpecifier getUnSetMessage() {
-		return new MessageSpecifier(Messages.DisabledNoVehicle);
+	public Message getUnSetMessage() {
+		return Messages.NO_VEHICLE_DISABLE;
 	}
 
 	@Override

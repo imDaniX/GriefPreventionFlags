@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.entity.Player;
@@ -27,12 +32,12 @@ public class FlagDef_NoEnderPearl extends FlagDefinition {
             if (claim != null) {
                 String owner = claim.getOwnerName();
 
-                String msg = new FlagsDataStore().getMessage(Messages.NoEnderPearlInClaim);
-                GPFlags.sendMessage(player, TextMode.Warn, msg.replace("{o}", owner).replace("{p}", player.getName()));
+                String msg = Messages.NO_ENDERPEARL_IN.getText();
+                GPFlags.sendMessage(player, TextMode.WARNING, msg.replace("{o}", owner).replace("{p}", player.getName()));
                 return;
             }
-            String msg = new FlagsDataStore().getMessage(Messages.NoEnderPearlInWorld);
-            GPFlags.sendMessage(player, TextMode.Warn, msg.replace("{p}", player.getName()));
+            String msg = Messages.NO_ENDERPEARL_WORLD.getText();
+            GPFlags.sendMessage(player, TextMode.WARNING, msg.replace("{p}", player.getName()));
             return;
         }
 
@@ -43,8 +48,8 @@ public class FlagDef_NoEnderPearl extends FlagDefinition {
             if (claim != null) {
                 String owner = claim.getOwnerName();
 
-                String msg = new FlagsDataStore().getMessage(Messages.NoEnderPearlToClaim);
-                GPFlags.sendMessage(player, TextMode.Warn, msg.replace("{o}", owner).replace("{p}", player.getName()));
+                String msg = Messages.NO_ENDERPEARL_TO.getText();
+                GPFlags.sendMessage(player, TextMode.WARNING, msg.replace("{o}", owner).replace("{p}", player.getName()));
             }
         }
 
@@ -60,13 +65,13 @@ public class FlagDef_NoEnderPearl extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoEnderPearl);
+	public Message getSetMessage() {
+        return Messages.NO_ENDERPEARL_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoEnderPearl);
+    public Message getUnSetMessage() {
+        return Messages.NO_ENDERPEARL_DISABLE;
     }
 
     @Override

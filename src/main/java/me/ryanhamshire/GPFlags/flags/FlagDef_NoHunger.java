@@ -1,16 +1,21 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FlagDef_NoHunger extends TimedPlayerFlagDefinition {
 
@@ -73,32 +78,32 @@ public class FlagDef_NoHunger extends TimedPlayerFlagDefinition {
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoHunger, parameters);
-    }
-
-    @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoHunger);
-    }
-
-    @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (!parameters.isEmpty()) {
             int amount;
             try {
                 amount = Integer.parseInt(parameters);
                 if (amount < 0) {
-                    return new SetFlagResult(false, new MessageSpecifier(Messages.FoodRegenInvalid));
+                    return new SetFlagResult(false, Messages.NO_HUNGER_INVALID);
                 }
             } catch (NumberFormatException e) {
-                return new SetFlagResult(false, new MessageSpecifier(Messages.FoodRegenInvalid));
+                return new SetFlagResult(false, Messages.NO_HUNGER_INVALID);
             }
         } else {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.FoodRegenInvalid));
+            return new SetFlagResult(false, Messages.NO_HUNGER_INVALID);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
+    }
+
+    @Override
+    public Message getSetMessage() {
+        return Messages.NO_HUNGER_ENABLE;
+    }
+
+    @Override
+    public Message getUnSetMessage() {
+        return Messages.NO_HUNGER_DISABLE;
     }
 
     @Override

@@ -1,6 +1,12 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.PlayerData;
@@ -23,7 +29,7 @@ public class FlagDef_NoEnterPlayer extends PlayerMovementFlagDefinition {
         PlayerData playerData = GriefPrevention.instance.dataStore.getPlayerData(player.getUniqueId());
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(to, false, playerData.lastClaim);
         if (flag.parameters.toUpperCase().contains(player.getName().toUpperCase()) && claim.allowAccess(player) != null) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.NoEnterPlayerMessage);
+            GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_ENTER_PLAYER_MESSAGE.getText());
             return false;
         }
         return true;
@@ -41,21 +47,21 @@ public class FlagDef_NoEnterPlayer extends PlayerMovementFlagDefinition {
     @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (parameters.isEmpty()) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.PlayerRequired));
+            return new SetFlagResult(false, Messages.PLAYER_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnabledNoEnterPlayer, parameters);
+	public Message getSetMessage() {
+        return Messages.NO_ENTER_PLAYER_ENABLE;
 
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisabledNoEnterPlayer);
+    public Message getUnSetMessage() {
+        return Messages.NO_ENTER_PLAYER_DISABLE;
     }
 
 }

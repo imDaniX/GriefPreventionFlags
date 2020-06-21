@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -55,12 +60,12 @@ public class FlagDef_RespawnLocation extends FlagDefinition {
         String[] params = parameters.split(" ");
 
         if (params.length < 4) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.LocationRequired));
+            return new SetFlagResult(false, Messages.LOCATION_REQUIRED);
         }
 
         World world = Bukkit.getWorld(params[0]);
         if (world == null) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.WorldNotFound));
+            return new SetFlagResult(false, Messages.WORLD_NOT_FOUND);
         }
 
         try {
@@ -70,10 +75,10 @@ public class FlagDef_RespawnLocation extends FlagDefinition {
             if (params.length > 4) Float.valueOf(params[4]);
             if (params.length > 5) Float.valueOf(params[5]);
         } catch (NumberFormatException e) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.LocationRequired));
+            return new SetFlagResult(false, Messages.LOCATION_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
@@ -82,13 +87,13 @@ public class FlagDef_RespawnLocation extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.SetRespawnLocation);
+	public Message getSetMessage() {
+        return Messages.RESPAWN_LOCATION_SET;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.UnSetRespawnLocation);
+    public Message getUnSetMessage() {
+        return Messages.RESPAWN_LOCATION_UNSET;
     }
 
     @Override

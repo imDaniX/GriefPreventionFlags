@@ -3,8 +3,8 @@ package me.ryanhamshire.GPFlags.flags;
 import me.ryanhamshire.GPFlags.Flag;
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GPFlags.util.VersionControl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -82,13 +82,13 @@ public class FlagDef_NoPlayerDamageByMonster extends FlagDefinition {
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoPlayerDamageByMonster);
+    public Message getSetMessage() {
+        return Messages.NO_PLAYER_DAMAGE_MONSTER_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoPlayerDamageByMonster);
+    public Message getUnSetMessage() {
+        return Messages.NO_PLAYER_DAMAGE_MONSTER_DISABLE;
     }
 
     @Override

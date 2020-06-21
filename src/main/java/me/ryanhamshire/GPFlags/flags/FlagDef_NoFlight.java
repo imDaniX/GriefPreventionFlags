@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.GameMode;
@@ -35,7 +40,7 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition {
         if (ownerFly != null && claim.ownerID.toString().equalsIgnoreCase(player.getUniqueId().toString())) return;
         if (ownerMember != null && claim.allowAccess(player) == null) return;
 
-        GPFlags.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
+        GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_FLIGHT.getText());
         player.setFlying(false);
         GameMode mode = player.getGameMode();
         if (mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR) {
@@ -64,7 +69,7 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition {
         Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
         if (flag == null) return;
 
-        GPFlags.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
+        GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_FLIGHT.getText());
         event.setCancelled(true);
         player.setAllowFlight(false);
     }
@@ -79,13 +84,13 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNoFlight);
+	public Message getSetMessage() {
+        return Messages.NO_FLIGHT_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNoFlight);
+    public Message getUnSetMessage() {
+        return Messages.NO_FLIGHT_DISABLE;
     }
 
     @Override

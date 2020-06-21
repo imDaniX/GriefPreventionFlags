@@ -1,12 +1,15 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import me.ryanhamshire.GriefPrevention.PlayerData;
+import me.ryanhamshire.GriefPrevention.events.PreventBlockBreakEvent;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,10 +20,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import me.ryanhamshire.GriefPrevention.PlayerData;
-import me.ryanhamshire.GriefPrevention.events.PreventBlockBreakEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FlagDef_SpleefArena extends FlagDefinition {
 
@@ -97,7 +101,7 @@ public class FlagDef_SpleefArena extends FlagDefinition {
         String blockMaterialName;
 
         if (params.length != 3) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.SpleefArenaHelp));
+            return new SetFlagResult(false, Messages.SPLEEF_ARENA_HELP);
         }
 
         try {
@@ -132,16 +136,16 @@ public class FlagDef_SpleefArena extends FlagDefinition {
             }
 
         } catch (IllegalArgumentException e) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.SpleefArenaHelp));
+            return new SetFlagResult(false, Messages.SPLEEF_ARENA_HELP);
         }
 
         try {
             Integer.valueOf(params[2]);
         } catch (NumberFormatException e) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.SpleefArenaHelp));
+            return new SetFlagResult(false, Messages.SPLEEF_ARENA_HELP);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     boolean isValidMaterial(String materialName) {
@@ -154,13 +158,13 @@ public class FlagDef_SpleefArena extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.SetSpleefArena);
+	public Message getSetMessage() {
+        return Messages.SPLEEF_ARENA_SET;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.UnSetSpleefArena);
+    public Message getUnSetMessage() {
+        return Messages.SPLEEF_ARENA_UNSET;
     }
 
     private class SpleefData {

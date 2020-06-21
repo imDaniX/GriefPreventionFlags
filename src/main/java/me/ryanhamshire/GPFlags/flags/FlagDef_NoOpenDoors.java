@@ -1,6 +1,12 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GPFlags.util.VersionControl;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -42,20 +48,20 @@ public class FlagDef_NoOpenDoors extends FlagDefinition {
 						for (String param : params) {
 							if (param.equalsIgnoreCase("doors") && vc.isDoor(block)) {
 								e.setCancelled(true);
-								GPFlags.sendMessage(player, TextMode.Err, Messages.NoOpenDoorMessage, param);
+								GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_OPEN_DOOR_MESSAGE.getText(param));
 							}
 							if (param.equalsIgnoreCase("trapdoors") && vc.isTrapDoor(block)) {
 								e.setCancelled(true);
-								GPFlags.sendMessage(player, TextMode.Err, Messages.NoOpenDoorMessage, param);
+								GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_OPEN_DOOR_MESSAGE.getText(param));
 							}
 							if (param.equalsIgnoreCase("gates") && vc.isGate(block)) {
 								e.setCancelled(true);
-								GPFlags.sendMessage(player, TextMode.Err, Messages.NoOpenDoorMessage, param);
+								GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_OPEN_DOOR_MESSAGE.getText(param));
 							}
 						}
 					} else {
 						e.setCancelled(true);
-						GPFlags.sendMessage(player, TextMode.Err, Messages.NoOpenDoorMessage, "doors");
+						GPFlags.sendMessage(player, TextMode.ERROR, Messages.NO_OPEN_DOOR_MESSAGE.getText("doors"));
 					}
 				}
 			}
@@ -72,17 +78,21 @@ public class FlagDef_NoOpenDoors extends FlagDefinition {
 	}
 
 	@Override
-	public MessageSpecifier getSetMessage(String parameters) {
+	public SetFlagResult ValidateParameters(String parameters) {
 		if (parameters.isEmpty()) {
-			return new MessageSpecifier(Messages.EnableNoOpenDoor);
-		} else {
-			return new MessageSpecifier(Messages.EnableNoOpenDoor, parameters);
+			return new SetFlagResult(false, this.getSetMessage());
 		}
+		return new SetFlagResult(true, this.getSetMessage(), parameters);
 	}
 
 	@Override
-	public MessageSpecifier getUnSetMessage() {
-		return new MessageSpecifier(Messages.DisableNoOpenDoor);
+	public Message getSetMessage() {
+		return Messages.NO_OPEN_DOOR_ENABLE;
+	}
+
+	@Override
+	public Message getUnSetMessage() {
+		return Messages.NO_OPEN_DOOR_DISABLE;
 	}
 
 	@Override

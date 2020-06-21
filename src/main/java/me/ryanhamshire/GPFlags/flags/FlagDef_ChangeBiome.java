@@ -2,9 +2,9 @@ package me.ryanhamshire.GPFlags.flags;
 
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.events.ClaimDeletedEvent;
@@ -134,20 +134,20 @@ public class FlagDef_ChangeBiome extends FlagDefinition {
     @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (parameters.isEmpty()) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.MessageRequired));
+            return new SetFlagResult(false, Messages.MESSAGE_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.ChangeBiomeSet, parameters); // TODO CHANGE
+	public Message getSetMessage() {
+        return Messages.CHANGE_BIOME_SET; // TODO CHANGE
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.ChangeBiomeUnset); // TODO CHANGE
+    public Message getUnSetMessage() {
+        return Messages.CHANGE_BIOME_UNSET; // TODO CHANGE
     }
 
     @Override

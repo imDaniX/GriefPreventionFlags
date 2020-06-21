@@ -3,10 +3,10 @@ package me.ryanhamshire.GPFlags.flags;
 import me.ryanhamshire.GPFlags.Flag;
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
@@ -18,7 +18,7 @@ public class FlagDef_ExitMessage extends PlayerMovementFlagDefinition {
 
     public FlagDef_ExitMessage(FlagManager manager, GPFlags plugin) {
         super(manager, plugin);
-        this.prefix = plugin.getFlagsDataStore().getMessage(Messages.EnterExitPrefix);
+        this.prefix = Messages.ENTER_EXIT_PREFIX.getText();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class FlagDef_ExitMessage extends PlayerMovementFlagDefinition {
             message = message.replace("%owner%", claim.getOwnerName()).replace("%name%", player.getName());
         }
 
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        GPFlags.sendMessage(player, TextMode.INFO, prefix + message);
 
         return true;
     }
@@ -44,22 +44,26 @@ public class FlagDef_ExitMessage extends PlayerMovementFlagDefinition {
     }
 
     @Override
-    public SetFlagResult ValidateParameters(String parameters) {
-        if (parameters.isEmpty()) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.MessageRequired));
+    public SetFlagResult ValidateParameters(String parameters)
+    {
+        if(parameters.isEmpty())
+        {
+            return new SetFlagResult(false, Messages.MESSAGE_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.AddedExitMessage, parameters);
+    public Message getSetMessage()
+    {
+        return Messages.EXIT_MESSAGE_ADDED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.RemovedExitMessage);
+    public Message getUnSetMessage()
+    {
+        return Messages.EXIT_MESSAGE_REMOVED;
     }
 
 }

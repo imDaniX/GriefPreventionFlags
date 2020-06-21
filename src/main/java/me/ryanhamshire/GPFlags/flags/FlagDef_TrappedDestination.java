@@ -1,12 +1,16 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
+import me.ryanhamshire.GriefPrevention.events.SaveTrappedPlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-
-import me.ryanhamshire.GriefPrevention.events.SaveTrappedPlayerEvent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,12 +42,12 @@ public class FlagDef_TrappedDestination extends FlagDefinition {
         String[] params = parameters.split(" ");
 
         if (params.length != 4) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.LocationRequired));
+            return new SetFlagResult(false, Messages.LOCATION_REQUIRED);
         }
 
         World world = Bukkit.getWorld(params[0]);
         if (world == null) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.WorldNotFound));
+            return new SetFlagResult(false, Messages.WORLD_NOT_FOUND);
         }
 
         try {
@@ -51,20 +55,20 @@ public class FlagDef_TrappedDestination extends FlagDefinition {
             Integer.valueOf(params[2]);
             Integer.valueOf(params[3]);
         } catch (NumberFormatException e) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.LocationRequired));
+            return new SetFlagResult(false, Messages.LOCATION_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableTrappedDestination);
+	public Message getSetMessage() {
+        return Messages.TRAPPED_DESTINATION_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableTrappedDestination);
+    public Message getUnSetMessage() {
+        return Messages.TRAPPED_DESTINATION_DISABLE;
     }
 
     @Override

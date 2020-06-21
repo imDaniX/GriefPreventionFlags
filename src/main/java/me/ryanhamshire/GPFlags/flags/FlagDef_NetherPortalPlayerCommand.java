@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,10 +39,10 @@ public class FlagDef_NetherPortalPlayerCommand extends FlagDefinition {
     @Override
     public SetFlagResult ValidateParameters(String parameters) {
         if (parameters.isEmpty()) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.CommandRequired));
+            return new SetFlagResult(false, Messages.COMMAND_REQUIRED);
         }
 
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     @Override
@@ -46,13 +51,13 @@ public class FlagDef_NetherPortalPlayerCommand extends FlagDefinition {
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.EnableNetherPortalPlayerCommand);
+	public Message getSetMessage() {
+        return Messages.NETHER_PORTAL_PLAYER_COMMAND_ENABLE;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.DisableNetherPortalPlayerCommand);
+    public Message getUnSetMessage() {
+        return Messages.NETHER_PORTAL_PLAYER_COMMAND_DISABLE;
     }
 
     @Override

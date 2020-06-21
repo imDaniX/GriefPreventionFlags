@@ -1,6 +1,11 @@
 package me.ryanhamshire.GPFlags.flags;
 
-import me.ryanhamshire.GPFlags.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.entity.Player;
@@ -23,7 +28,7 @@ public class FlagDef_RaidMemberOnly extends FlagDefinition {
 		if (claim.allowAccess(player) != null) {
 			event.setCancelled(true);
 			player.removePotionEffect(PotionEffectType.BAD_OMEN);
-			GPFlags.sendMessage(player, TextMode.Warn, Messages.RaidMemberOnlyDeny);
+			GPFlags.sendMessage(player, TextMode.WARNING, Messages.RAID_MEMBERS_DENY.getText());
 		}
 	}
 
@@ -37,13 +42,13 @@ public class FlagDef_RaidMemberOnly extends FlagDefinition {
 	}
 
 	@Override
-	public MessageSpecifier getSetMessage(String parameters) {
-		return new MessageSpecifier(Messages.EnabledRaidMemberOnly);
+	public Message getSetMessage() {
+		return Messages.RAID_MEMBERS_ENABLE;
 	}
 
 	@Override
-	public MessageSpecifier getUnSetMessage() {
-		return new MessageSpecifier(Messages.DisabledRaidMemberOnly);
+	public Message getUnSetMessage() {
+		return Messages.RAID_MEMBER_DISABLE;
 	}
 
 	@Override

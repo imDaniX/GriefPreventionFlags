@@ -3,9 +3,9 @@ package me.ryanhamshire.GPFlags.flags;
 import me.ryanhamshire.GPFlags.Flag;
 import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
-import me.ryanhamshire.GPFlags.MessageSpecifier;
-import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.GameMode;
@@ -42,12 +42,12 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
                 if (to.getY() - block.getY() >= 4) {
                     GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 }
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
                 return true;
             }
             if (player.getAllowFlight() && !canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
             return true;
         }
@@ -57,17 +57,17 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
         if (!claim.getOwnerName().equalsIgnoreCase(player.getName())) {
             if (!canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
             if (!canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                GPFlags.sendMessage(player, TextMode.WARNING, Messages.FLIGHT_EXIT_DISABLED.getText());
             }
             return true;
         }
 
         player.setAllowFlight(true);
-        GPFlags.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
+        GPFlags.sendMessage(player, TextMode.SUCCESS, Messages.FLIGHT_EXIT_DISABLED.getText());
         return true;
     }
 
@@ -102,13 +102,13 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
     }
 
     @Override
-    public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.OwnerFlightEnabled);
+    public Message getSetMessage() {
+        return Messages.FLIGHT_OWNER_ENABLED;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.OwnerFlightDisabled);
+    public Message getUnSetMessage() {
+        return Messages.FLIGHT_OWNER_DISABLED;
     }
 
 }

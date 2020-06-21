@@ -1,8 +1,18 @@
 package me.ryanhamshire.GPFlags.flags;
 
 
-import me.ryanhamshire.GPFlags.*;
-import org.bukkit.*;
+import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
+import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.WorldSettings;
+import me.ryanhamshire.GPFlags.WorldSettingsManager;
+import me.ryanhamshire.GPFlags.message.Message;
+import me.ryanhamshire.GPFlags.message.Messages;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -26,7 +36,7 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
 
             String gameMode = settings.worldGamemodeDefault;
             player.setGameMode(GameMode.valueOf(gameMode.toUpperCase()));
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
+            GPFlags.sendMessage(player, TextMode.WARNING, Messages.PLAYER_GAMEMODE_MESSAGE.getText(gameMode));
 
             if(player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
                 Block block = player.getLocation().getBlock();
@@ -44,7 +54,7 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
         String playerGameMode = player.getGameMode().toString();
         if(gameMode.equalsIgnoreCase(playerGameMode)) return true;
         player.setGameMode(GameMode.valueOf(gameMode.toUpperCase()));
-        GPFlags.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
+        GPFlags.sendMessage(player, TextMode.WARNING, Messages.PLAYER_GAMEMODE_MESSAGE.getText(gameMode));
         return true;
     }
 
@@ -68,13 +78,13 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
     {
         if(parameters.isEmpty())
         {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.PlayerGamemodeRequired));
+            return new SetFlagResult(false, Messages.PLAYER_GAMEMODE_REQUIRED);
         }
         if(!parameters.equalsIgnoreCase("survival") && !parameters.equalsIgnoreCase("creative") &&
                 !parameters.equalsIgnoreCase("adventure") && !parameters.equalsIgnoreCase("spectator")) {
-            return new SetFlagResult(false, new MessageSpecifier(Messages.PlayerGamemodeRequired));
+            return new SetFlagResult(false, Messages.PLAYER_GAMEMODE_REQUIRED);
         }
-        return new SetFlagResult(true, this.getSetMessage(parameters));
+        return new SetFlagResult(true, this.getSetMessage(), parameters);
     }
 
     public void updateSettings(WorldSettingsManager settingsManager) {
@@ -87,13 +97,13 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
     }
 
     @Override
-	public MessageSpecifier getSetMessage(String parameters) {
-        return new MessageSpecifier(Messages.PlayerGamemodeSet, parameters);
+	public Message getSetMessage() {
+        return Messages.PLAYER_GAMEMODE_SET;
     }
 
     @Override
-    public MessageSpecifier getUnSetMessage() {
-        return new MessageSpecifier(Messages.PlayerGamemodeUnSet);
+    public Message getUnSetMessage() {
+        return Messages.PLAYER_GAMEMODE_UNSET;
     }
 
 }

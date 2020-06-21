@@ -24,12 +24,12 @@ import org.bukkit.ChatColor;
  * Text color modifiers
  */
 //just a few constants for chat color codes
-public class TextMode {
+public interface TextMode {
 
-	public final static ChatColor Info = ChatColor.AQUA;
-	public final static ChatColor Instr = ChatColor.YELLOW;
-	public final static ChatColor Warn = ChatColor.GOLD;
-	public final static ChatColor Err = ChatColor.RED;
-	public final static ChatColor Success = ChatColor.GREEN;
+	ChatColor INFO = ChatColor.AQUA;
+	ChatColor INSTRUCTION = ChatColor.YELLOW;
+	ChatColor WARNING = ChatColor.GOLD;
+	ChatColor ERROR = ChatColor.RED;
+	ChatColor SUCCESS = ChatColor.GREEN;
 
 }
