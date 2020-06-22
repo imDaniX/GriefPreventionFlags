@@ -99,15 +99,11 @@ import java.util.List;
 /**
  * <b>Main GriefPrevention Flags class</b>
  */
-@SuppressWarnings("WeakerAccess")
 public class GPFlags extends JavaPlugin {
     private static VersionControl vc;
 
     //for convenience, a reference to the instance of this plugin
     private static GPFlags instance;
-
-    //this handles.. some file names
-    private FlagsDataStore flagsDataStore;
 
     //this handles customizable messages
     private MessageStore messageStore;
@@ -360,7 +356,7 @@ public class GPFlags extends JavaPlugin {
     }
 
     //handles slash commands
-    @SuppressWarnings("NullableProblems")
+    @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         Player player = null;
         if (cmd.getName().equalsIgnoreCase("allflags")) {
@@ -405,9 +401,7 @@ public class GPFlags extends JavaPlugin {
             }
 
             String[] params = new String[args.length - 1];
-            for (int i = 1; i < args.length; i++) {
-                params[i - 1] = args[i];
-            }
+            System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag(FlagManager.DEFAULT_FLAG_ID, def, true, params);
             if (result.success) {
@@ -463,9 +457,7 @@ public class GPFlags extends JavaPlugin {
             }
 
             String[] params = new String[args.length - 1];
-            for (int i = 1; i < args.length; i++) {
-                params[i - 1] = args[i];
-            }
+            System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag("everywhere", def, true, params);
             if (result.success) {
@@ -529,9 +521,7 @@ public class GPFlags extends JavaPlugin {
             }
 
             String[] params = new String[args.length - 2];
-            for (int i = 2; i < args.length; i++) {
-                params[i - 2] = args[i];
-            }
+            System.arraycopy(args, 2, params, 0, args.length - 2);
 
             // SET BIOME
             if (flagName.equalsIgnoreCase("ChangeBiome")) {
@@ -578,9 +568,7 @@ public class GPFlags extends JavaPlugin {
             }
 
             String[] params = new String[args.length - 1];
-            for (int i = 1; i < args.length; i++) {
-                params[i - 1] = args[i];
-            }
+            System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag(player.getWorld().getName(), def, true, params);
             if (result.success) {
@@ -629,21 +617,21 @@ public class GPFlags extends JavaPlugin {
                 flags = this.flagManager.getFlags(claim.getID().toString());
                 for (Flag flag : flags) {
                     flagsFound = true;
-                    builder1.append((flag.getSet() ? "+" : "-") + flag.flagDefinition.getName()).append(" ");
+                    builder1.append(flag.getSet() ? "+" : "-").append(flag.flagDefinition.getName()).append(" ");
                 }
 
                 if (claim.parent != null) {
                     flags = this.flagManager.getFlags(claim.parent.getID().toString());
                     for (Flag flag : flags) {
                         flagsFound = true;
-                        builder2.append((flag.getSet() ? "+" : "-") + flag.flagDefinition.getName()).append(" ");
+                        builder2.append(flag.getSet() ? "+" : "-").append(flag.flagDefinition.getName()).append(" ");
                     }
                 }
 
                 flags = this.flagManager.getFlags(FlagManager.DEFAULT_FLAG_ID);
                 for (Flag flag2 : flags) {
                     flagsFound = true;
-                    builder3.append((flag2.getSet() ? "+" : "-") + flag2.flagDefinition.getName()).append(" ");
+                    builder3.append(flag2.getSet() ? "+" : "-").append(flag2.flagDefinition.getName()).append(" ");
                 }
             }
 
@@ -651,14 +639,14 @@ public class GPFlags extends JavaPlugin {
             flags = this.flagManager.getFlags(player.getWorld().getName());
             for (Flag flag3 : flags) {
                 flagsFound = true;
-                builder4.append((flag3.getSet() ? "+" : "-") + flag3.flagDefinition.getName()).append(" ");
+                builder4.append(flag3.getSet() ? "+" : "-").append(flag3.flagDefinition.getName()).append(" ");
             }
 
             StringBuilder builder5 = new StringBuilder();
             flags = this.flagManager.getFlags("everywhere");
             for (Flag flag4 : flags) {
                 flagsFound = true;
-                builder5.append((flag4.getSet() ? "+" : "-") + flag4.flagDefinition.getName()).append(" ");
+                builder5.append(flag4.getSet() ? "+" : "-").append(flag4.flagDefinition.getName()).append(" ");
             }
 
             if (builder1.length() > 0)
@@ -693,7 +681,7 @@ public class GPFlags extends JavaPlugin {
             return true;
         }
 
-        if (cmd.getName().equalsIgnoreCase("SetClaimFlag") && player != null) {
+        if (cmd.getName().equalsIgnoreCase("SetClaimFlag")) {
             if (args.length < 1) return false;
 
             String flagName = args[0];
@@ -719,9 +707,7 @@ public class GPFlags extends JavaPlugin {
             }
 
             String[] params = new String[args.length - 1];
-            for (int i = 1; i < args.length; i++) {
-                params[i - 1] = args[i];
-            }
+            System.arraycopy(args, 1, params, 0, args.length - 1);
 
             // stop owner/ownermember fly flags from joining
             Collection<Flag> flags;
@@ -767,7 +753,7 @@ public class GPFlags extends JavaPlugin {
             if (result.success) this.flagManager.save();
 
             return true;
-        } else if (cmd.getName().equalsIgnoreCase("UnSetClaimFlag") && player != null) {
+        } else if (cmd.getName().equalsIgnoreCase("UnSetClaimFlag")) {
             if (args.length < 1) return false;
 
             String flagName = args[0];
@@ -812,28 +798,13 @@ public class GPFlags extends JavaPlugin {
     }
 
     //sends a color-coded message to a player
-    public static void sendMessage(CommandSender player, ChatColor color, String message) {
+    public static void sendMessage(CommandSender sender, ChatColor color, String message) {
         if (message == null || message.length() == 0) return;
 
-        if (player == null) {
+        if (sender == null) {
             GPFlags.addLogEntry(color + message);
         } else {
-            player.sendMessage(color + message);
-        }
-    }
-
-    /** Send a delayed message
-     * @param player Player to send message to
-     * @param color Color of the message, can use {@link TextMode}
-     * @param message Message to send
-     * @param delayInTicks Delay for message to send
-     */
-    public static void sendMessage(CommandSender player, ChatColor color, String message, long delayInTicks) {
-        SendPlayerMessageTask task = new SendPlayerMessageTask(player, color, message);
-        if (delayInTicks > 0) {
-            GPFlags.instance.getServer().getScheduler().runTaskLater(GPFlags.instance, task, delayInTicks);
-        } else {
-            task.run();
+            sender.sendMessage(color + message);
         }
     }
 
@@ -843,7 +814,7 @@ public class GPFlags extends JavaPlugin {
         Collection<FlagDefinition> defs = this.flagManager.getFlagDefinitions();
         for (FlagDefinition def : defs) {
             if (this.playerHasPermissionForFlag(def, player)) {
-                flagDefsList.append(def.getName() + " ");
+                flagDefsList.append(def.getName()).append(" ");
             }
         }
 
@@ -860,13 +831,6 @@ public class GPFlags extends JavaPlugin {
      */
     public static GPFlags getInstance() {
         return instance;
-    }
-
-    /** Get an instance of the flags data store
-     * @return Instance of the flags data store
-     */
-    public FlagsDataStore getFlagsDataStore() {
-        return this.flagsDataStore;
     }
 
     /** Get an instance of the flag manager
