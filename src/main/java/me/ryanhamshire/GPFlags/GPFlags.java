@@ -163,7 +163,7 @@ public class GPFlags extends JavaPlugin {
     private void loadConfig() {
         this.flagManager.clear();
         this.worldSettingsManager = new WorldSettingsManager();
-        this.messageStore.reload(YamlConfiguration.loadConfiguration(new File(FlagsDataStore.messagesFilePath)));
+        this.messageStore.reload(new File(FlagsDataStore.messagesFilePath));
 
         //load the config if it exists
         FileConfiguration inConfig = YamlConfiguration.loadConfiguration(new File(FlagsDataStore.configFilePath));

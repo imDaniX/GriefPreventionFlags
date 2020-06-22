@@ -7,11 +7,11 @@ public interface Message {
 
     String getText();
 
-    String getNote();
+    String getNotes();
 
     void setText(String text);
 
-    void setNote(String node);
+    void setNotes(String node);
 
     default String getText(String... notes) {
         String text = getText();

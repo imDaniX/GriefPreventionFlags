@@ -127,11 +127,11 @@ public enum Messages implements Message {
 
     NO_ENDERPEARL_ENABLE("EnableNoEnderPearl", "Now blocking ender pearl teleportation to/from this area."),
     NO_ENDERPEARL_DISABLE("DisableNoEnderPearl", "Stopped blocking ender pearl teleportation to/from this area."),
-    NO_ENDERPEARL_IN("NoEnderPearlInClaim", "{p}, you can not use enderpearls in {o}'s claim",
+    NO_ENDERPEARL_IN("NoEnderPearlInClaim", "{p}, you can not use ender pearls in {o}'s claim",
         "o: owner of claim" + " p: event player"),
-    NO_ENDERPEARL_TO("NoEnderPearlToClaim", "{p}, you can not use enderpearls to teleprot to {o}'s claim",
+    NO_ENDERPEARL_TO("NoEnderPearlToClaim", "{p}, you can not use ender pearls to teleport to {o}'s claim",
         "o: owner of claim" + " p: event player"),
-    NO_ENDERPEARL_WORLD("NoEnderPearlInWorld", "{p}, you can not use enderpearls in this world",
+    NO_ENDERPEARL_WORLD("NoEnderPearlInWorld", "{p}, you can not use ender pearls in this world",
         "p: event player"),
 
     NO_MCMMO_SKILLS_ENABLE("EnableNoMcMMOSkills", "Now blocking McMMO skill use in this area."),
@@ -245,18 +245,20 @@ public enum Messages implements Message {
 
     private final String id;
     private final String defText;
+    private final String defNote;
     private String text;
     private String note;
 
-    Messages(String id, String defText) {
-        this(id, defText, null);
+    Messages(String id, String text) {
+        this(id, text, null);
     }
 
-    Messages(String id, String defText, String note) {
+    Messages(String id, String text, String note) {
         this.id = id;
-        this.defText = Util.clr(defText);
+        this.defText = Util.clr(text);
+        this.defNote = note;
         this.text = this.defText;
-        this.note = note;
+        this.note = this.defNote;
     }
 
     /* Alternative placeholders system
@@ -290,13 +292,13 @@ public enum Messages implements Message {
     }
 
     @Override
-    public String getNote() {
+    public String getNotes() {
         return note;
     }
 
     @Override
-    public void setNote(String note) {
-        this.note = note == null ? null : Util.clr(note);
+    public void setNotes(String note) {
+        this.note = note == null ? defNote : Util.clr(note);
     }
 
     @Override
