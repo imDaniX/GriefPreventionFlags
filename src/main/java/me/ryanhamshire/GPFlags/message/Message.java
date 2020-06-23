@@ -17,6 +17,7 @@ public interface Message {
         String text = getText();
         for (int i = 0; i < notes.length; i++) {
             String param = notes[i];
+            if(param == null) continue;
             text = text.replace("{" + i + "}", param);
         }
         return text;
