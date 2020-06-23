@@ -160,7 +160,7 @@ public class GPFlags extends JavaPlugin {
         }
     }
 
-    private void loadConfig() {
+    public void loadConfig() {
         this.flagManager.clear();
         this.worldSettingsManager = new WorldSettingsManager();
         this.messageStore.reload(new File(FlagsDataStore.messagesFilePath));
@@ -404,11 +404,11 @@ public class GPFlags extends JavaPlugin {
             System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag(FlagManager.DEFAULT_FLAG_ID, def, true, params);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.DEFAULT_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -428,11 +428,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(FlagManager.DEFAULT_FLAG_ID, def);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.DEFAULT_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -460,11 +460,11 @@ public class GPFlags extends JavaPlugin {
             System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag("everywhere", def, true, params);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.SERVER_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -484,11 +484,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.unSetFlag("everywhere", def);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.SERVER_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -532,9 +532,9 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(claim.getID().toString(), def, true, params);
-            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
-            sender.sendMessage(result.message.getText(color, result.parameters));
-            if (result.success) {
+            ChatColor color = result.isSuccess() ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.getMessage().getText(color, result.getParameters()));
+            if (result.isSuccess()) {
                 this.flagManager.save();
                 sender.sendMessage(Util.clr("&7Flag &b" + def.getName() + " &7successfully set in &b" + player.getName() + "&7's claim."));
                 return true;
@@ -571,11 +571,11 @@ public class GPFlags extends JavaPlugin {
             System.arraycopy(args, 1, params, 0, args.length - 1);
 
             SetFlagResult result = this.flagManager.setFlag(player.getWorld().getName(), def, true, params);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.WORLD_FLAG_SET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -595,11 +595,11 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(player.getWorld().getName(), def);
-            if (result.success) {
+            if (result.isSuccess()) {
                 sender.sendMessage(Messages.WORLD_FLAG_UNSET.getText(TextMode.SUCCESS));
                 this.flagManager.save();
             } else {
-                sender.sendMessage(result.message.getText(TextMode.ERROR, result.parameters));
+                sender.sendMessage(result.getMessage().getText(TextMode.ERROR, result.getParameters()));
             }
 
             return true;
@@ -748,9 +748,9 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.setFlag(claimID.toString(), def, true, params);
-            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
-            sender.sendMessage(result.message.getText(color, result.parameters));
-            if (result.success) this.flagManager.save();
+            ChatColor color = result.isSuccess() ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.getMessage().getText(color, result.getParameters()));
+            if (result.isSuccess()) this.flagManager.save();
 
             return true;
         } else if (cmd.getName().equalsIgnoreCase("UnSetClaimFlag")) {
@@ -781,9 +781,9 @@ public class GPFlags extends JavaPlugin {
             }
 
             SetFlagResult result = this.flagManager.unSetFlag(claimID.toString(), def);
-            ChatColor color = result.success ? TextMode.SUCCESS : TextMode.ERROR;
-            sender.sendMessage(result.message.getText(color));
-            if (result.success) this.flagManager.save();
+            ChatColor color = result.isSuccess() ? TextMode.SUCCESS : TextMode.ERROR;
+            sender.sendMessage(result.getMessage().getText(color));
+            if (result.isSuccess()) this.flagManager.save();
 
             return true;
         }

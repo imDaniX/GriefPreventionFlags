@@ -4,9 +4,9 @@ import me.ryanhamshire.GPFlags.message.Message;
 
 public class SetFlagResult {
 
-    boolean success;
-    Message message;
-    String parameters;
+    private final boolean success;
+    private final Message message;
+    private final String parameters;
 
     public SetFlagResult(boolean success, Message message, String parameters) {
         this.success = success;
@@ -17,5 +17,17 @@ public class SetFlagResult {
     public SetFlagResult(boolean success, Message message) {
         this.success = success;
         this.message = message;
+        this.parameters = null;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+    public String getParameters() {
+        return parameters;
     }
 }

@@ -72,7 +72,7 @@ public class FlagManager implements TabCompleter {
         SetFlagResult result;
         if(isActive) {
             result = def.ValidateParameters(parameters);
-            if(!result.success) return result;
+            if(!result.isSuccess()) return result;
         } else {
             result = new SetFlagResult(true, def.getUnSetMessage());
         }
@@ -198,8 +198,8 @@ public class FlagManager implements TabCompleter {
                 FlagDefinition def = this.getFlagDefinitionByName(flagName);
                 if(def != null) {
                     SetFlagResult result = this.setFlag(claimID, def, set, params);
-                    if(!result.success) {
-                        errors.add(result.message);
+                    if(!result.isSuccess()) {
+                        errors.add(result.getMessage());
                     }
                 }
             }
